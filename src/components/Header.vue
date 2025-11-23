@@ -9,10 +9,12 @@
         
         <nav class="nav-links">
           <router-link to="/" class="nav-link">首页</router-link>
-          <router-link to="/diet" class="nav-link">饮食规划</router-link>
-          <router-link to="/workout" class="nav-link">运动建议</router-link>
-          <router-link to="/mental" class="nav-link">心理陪伴</router-link>
-          <router-link to="/profile" class="nav-link" v-if="userStore.isAuthenticated">个人中心</router-link>
+          <template v-if="userStore.isAuthenticated">
+            <router-link to="/diet" class="nav-link">饮食规划</router-link>
+            <router-link to="/workout" class="nav-link">运动建议</router-link>
+            <router-link to="/mental" class="nav-link">心理陪伴</router-link>
+            <router-link to="/profile" class="nav-link">个人中心</router-link>
+          </template>
         </nav>
 
         <div class="user-actions">

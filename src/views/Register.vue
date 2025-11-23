@@ -85,19 +85,17 @@ const handleRegister = async () => {
     if (valid) {
       loading.value = true
       try {
-        await userStore.register({
-          email: registerForm.email,
-          username: registerForm.username,
-          password: registerForm.password
-        })
-        ElMessage.success('注册成功，请登录')
-        router.push('/login')
-      } catch (error) {
-        ElMessage.error('注册失败，请稍后重试')
-        console.error('Register error:', error)
-      } finally {
-        loading.value = false
-      }
+          await userStore.register(registerForm.username, registerForm.email, registerForm.password)
+          ElMessage.success('注册成功，请登录')
+          router.push('/login')
+        } catch (error: any) {
+          // 提供更详细的错误信息
+          const errorMessage = error.response?.data?.message || '注册失败，请稍后重试'
+          ElMessage.error(errorMessage)
+          console.error('Register error:', error)
+        } finally {
+          loading.value = false
+        }
     }
   })
 }

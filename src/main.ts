@@ -7,6 +7,7 @@ import './assets/styles/main.css'
 
 import App from './App.vue'
 import router from './router'
+import { useUserStore } from '@/stores/user'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -20,4 +21,15 @@ app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 
-app.mount('#app')
+// 应用启动时自动加载用户认证状态
+const initApp = async () => {
+  const userStore = useUserStore()
+  // 尝试从localStorage加载用户信息
+  await userStore.loadUser()
+  
+  // 挂载应用
+  app.mount('#app')
+}
+
+// 初始化应用
+initApp()

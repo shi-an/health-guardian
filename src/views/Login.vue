@@ -41,10 +41,13 @@ const userStore = useUserStore()
 const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
 
+// 初始化表单时检查是否有记住的邮箱
+const rememberedEmail = localStorage.getItem('rememberedEmail') || ''
+
 const loginForm = reactive({
-  email: '',
+  email: rememberedEmail,
   password: '',
-  rememberMe: false
+  rememberMe: !!rememberedEmail
 })
 
 const loginRules = reactive<FormRules>({
@@ -66,10 +69,20 @@ const handleLogin = async () => {
       loading.value = true
       try {
         await userStore.login(loginForm.email, loginForm.password)
+        
+        // 实现记住我功能
+        if (loginForm.rememberMe) {
+          localStorage.setItem('rememberedEmail', loginForm.email)
+        } else {
+          localStorage.removeItem('rememberedEmail')
+        }
+        
         ElMessage.success('登录成功')
         router.push('/')
-      } catch (error) {
-        ElMessage.error('登录失败，请检查邮箱和密码')
+      } catch (error: any) {
+        // 提供更详细的错误信息
+        const errorMessage = error.response?.data?.message || '登录失败，请检查邮箱和密码'
+        ElMessage.error(errorMessage)
         console.error('Login error:', error)
       } finally {
         loading.value = false
