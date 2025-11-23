@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康守护 - AI驱动的健康管理平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS已移至src/assets/styles/main.css -->
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>健康守护</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-page="home">首页</a>
+                    <a href="#" class="nav-link" data-page="diet">饮食规划</a>
+                    <a href="#" class="nav-link" data-page="workout">运动建议</a>
+                    <a href="#" class="nav-link" data-page="mental">心理陪伴</a>
+                    <a href="#" class="nav-link" data-page="profile">个人中心</a>
+                </div>
+                <div class="user-actions">
+                    <div id="user-info" class="user-info hidden">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="username">用户</span>
+                        <button id="logout-btn" class="btn btn-outline">退出</button>
+                    </div>
+                    <div id="guest-actions">
+                        <button id="login-btn" class="btn btn-outline">登录</button>
+                        <button id="register-btn" class="btn btn-primary">注册</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>登录账号</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">邮箱</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="请输入邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">密码</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+                <div class="form-footer">
+                    <p>还没有账号？<a href="#" id="show-register">立即注册</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>注册账号</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">姓名</label>
+                    <input type="text" id="register-name" class="form-control" placeholder="请输入姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">邮箱</label>
+                    <input type="email" id="register-email" class="form-control" placeholder="请输入邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">密码</label>
+                    <input type="password" id="register-password" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">确认密码</label>
+                    <input type="password" id="register-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">注册</button>
+                <div class="form-footer">
+                    <p>已有账号？<a href="#" id="show-login">立即登录</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <main>
+        <!-- 首页 -->
+        <section id="home" class="page active">
+            <div class="container">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h1>AI驱动的个性化健康管理平台</h1>
+                        <p>健康守护利用先进的人工智能技术，为您提供个性化的饮食规划、科学运动建议和全天候心理陪伴，助您实现主动健康管理。</p>
+                        <button class="btn btn-primary" id="get-started-btn">开始健康之旅</button>
+                    </div>
+                    <div class="hero-image">
+                        <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #4a9df7, #6cdfcc); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                            AI健康管理可视化界面
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3>智能饮食规划</h3>
+                        <p>基于您的身体状况、健康目标和饮食偏好，AI算法生成个性化营养餐单，助您轻松管理每日摄入。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3>科学运动建议</h3>
+                        <p>根据您的体能水平、时间安排和健身目标，提供定制化的运动方案，确保安全有效地达成目标。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <h3>心理陪伴助手</h3>
+                        <p>全天候AI脑伴，提供情绪支持、压力管理和正念练习，守护您的心理健康。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 饮食规划页面 -->
+        <section id="diet" class="page">
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">个性化饮食规划</h2>
+                <div class="diet-form">
+                    <h3 style="margin-bottom: 20px;">请输入您的健康信息</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">年龄</label>
+                            <input type="number" id="age" class="form-control" placeholder="请输入您的年龄">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">性别</label>
+                            <select id="gender" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="male">男性</option>
+                                <option value="female">女性</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="height">身高 (cm)</label>
+                            <input type="number" id="height" class="form-control" placeholder="请输入您的身高">
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">体重 (kg)</label>
+                            <input type="number" id="weight" class="form-control" placeholder="请输入您的体重">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goal">健康目标</label>
+                            <select id="goal" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="weight-loss">减重</option>
+                                <option value="maintain">维持体重</option>
+                                <option value="muscle-gain">增肌</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity">活动水平</label>
+                            <select id="activity" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="sedentary">久坐</option>
+                                <option value="light">轻度活动</option>
+                                <option value="moderate">中度活动</option>
+                                <option value="active">活跃</option>
+                                <option value="very-active">非常活跃</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="allergies">过敏或禁忌食物</label>
+                        <input type="text" id="allergies" class="form-control" placeholder="例如：海鲜、花生等">
+                    </div>
+                    <button id="generate-diet" class="btn btn-primary">生成饮食计划</button>
+                    <div id="diet-loader" class="loader hidden" style="margin-top: 20px;"></div>
+                </div>
+                
+                <div id="diet-result" class="diet-result">
+                    <h3 style="margin-bottom: 20px;">您的个性化饮食计划</h3>
+                    <p>基于您的健康数据，AI已为您生成以下饮食建议：</p>
+                    
+                    <div class="meal-plan">
+                        <div class="meal-card">
+                            <div class="meal-header">早餐</div>
+                            <div class="meal-content">
+                                <ul>
+                                    <li>全麦吐司 2片</li>
+                                    <li>煮鸡蛋 1个</li>
+                                    <li>牛奶 200ml</li>
+                                    <li>苹果 1个</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="meal-card">
+                            <div class="meal-header">午餐</div>
+                            <div class="meal-content">
+                                <ul>
+                                    <li>糙米饭 1碗</li>
+                                    <li>清蒸鱼 150g</li>
+                                    <li>西兰花炒胡萝卜</li>
+                                    <li>豆腐汤 1碗</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="meal-card">
+                            <div class="meal-header">晚餐</div>
+                            <div class="meal-content">
+                                <ul>
+                                    <li>藜麦沙拉 1份</li>
+                                    <li>鸡胸肉 120g</li>
+                                    <li>烤蔬菜拼盘</li>
+                                    <li>酸奶 1杯</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                        <h4>营养分析</h4>
+                        <p>总热量: 1850 kcal | 蛋白质: 95g | 碳水化合物: 210g | 脂肪: 55g</p>
+                        <p>此饮食计划旨在帮助您达成健康目标，同时满足您的营养需求。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 运动建议页面 -->
+        <section id="workout" class="page">
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">个性化运动建议</h2>
+                <p style="margin-bottom: 30px;">根据您的健康数据和目标，AI为您推荐以下运动方案：</p>
+                
+                <div class="workout-cards">
+                    <div class="workout-card">
+                        <div class="workout-image">
+                            [有氧运动示意图]
+                        </div>
+                        <div class="workout-content">
+                            <h3>有氧训练</h3>
+                            <div class="workout-tags">
+                                <span class="tag">燃脂</span>
+                                <span class="tag">心肺</span>
+                            </div>
+                            <p>推荐：每周3-5次，每次30-45分钟</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>快走或慢跑</li>
+                                <li>游泳或骑行</li>
+                                <li>椭圆机训练</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="workout-card">
+                        <div class="workout-image">
+                            [力量训练示意图]
+                        </div>
+                        <div class="workout-content">
+                            <h3>力量训练</h3>
+                            <div class="workout-tags">
+                                <span class="tag">增肌</span>
+                                <span class="tag">塑形</span>
+                            </div>
+                            <p>推荐：每周2-3次，每次45-60分钟</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>深蹲 3组×12次</li>
+                                <li>俯卧撑 3组×10次</li>
+                                <li>哑铃推举 3组×12次</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="workout-card">
+                        <div class="workout-image">
+                            [柔韧性与平衡训练示意图]
+                        </div>
+                        <div class="workout-content">
+                            <h3>柔韧性与平衡</h3>
+                            <div class="workout-tags">
+                                <span class="tag">放松</span>
+                                <span class="tag">柔韧</span>
+                            </div>
+                            <p>推荐：每周2-3次，每次15-20分钟</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>瑜伽基础体式</li>
+                                <li>全身拉伸</li>
+                                <li>平衡练习</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 40px; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3>AI运动建议说明</h3>
+                    <p>我们的AI系统已根据您的个人资料（年龄、体重、活动水平和健康目标）为您定制了上述运动方案。此方案旨在帮助您安全有效地达成健康目标。</p>
+                    <p style="margin-top: 15px;"><strong>注意事项：</strong> 开始任何新的运动计划前，如有健康问题请咨询医生。运动过程中如感到不适，请立即停止。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 心理陪伴页面 -->
+        <section id="mental" class="page">
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">AI脑伴助手</h2>
+                <p style="margin-bottom: 30px;">与我们的AI助手聊天，获得情绪支持和心理疏导：</p>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>心理健康助手</h3>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            您好！我是您的心理健康助手。今天感觉如何？有什么我可以帮助您的吗？
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="输入您想说的话...">
+                        <button id="send-btn" class="btn btn-primary">发送</button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <h4><i class="fas fa-brain" style="color: var(--primary); margin-right: 10px;"></i>正念练习</h4>
+                        <p>尝试5分钟的正念呼吸，专注于当下的感受，不加评判。</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <h4><i class="fas fa-heart" style="color: var(--accent); margin-right: 10px;"></i>情绪追踪</h4>
+                        <p>记录您的情绪变化，识别触发因素和应对策略。</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <h4><i class="fas fa-hands-helping" style="color: var(--secondary); margin-right: 10px;"></i>压力管理</h4>
+                        <p>学习有效的压力管理技巧，提高脑韧性。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 个人中心页面 -->
+        <section id="profile" class="page">
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">个人中心</h2>
+                
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar" id="profile-avatar">U</div>
+                        <h3 style="text-align: center;" id="profile-name">用户名</h3>
+                        <ul class="profile-menu">
+                            <li class="active" data-section="personal-info">个人信息</li>
+                            <li data-section="health-data">健康数据</li>
+                            <li data-section="diet-history">饮食记录</li>
+                            <li data-section="workout-history">运动记录</li>
+                            <li data-section="settings">账户设置</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="profile-content">
+                        <!-- 个人信息部分 -->
+                        <div id="personal-info" class="profile-section active">
+                            <h3 style="margin-bottom: 20px;">个人信息</h3>
+                            <form id="personal-info-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-fullname">姓名</label>
+                                        <input type="text" id="profile-fullname" class="form-control" placeholder="请输入姓名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-email">邮箱</label>
+                                        <input type="email" id="profile-email" class="form-control" placeholder="请输入邮箱" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-age">年龄</label>
+                                        <input type="number" id="profile-age" class="form-control" placeholder="请输入年龄">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-gender">性别</label>
+                                        <select id="profile-gender" class="form-control">
+                                            <option value="">请选择</option>
+                                            <option value="male">男性</option>
+                                            <option value="female">女性</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-height">身高 (cm)</label>
+                                        <input type="number" id="profile-height" class="form-control" placeholder="请输入身高">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-weight">体重 (kg)</label>
+                                        <input type="number" id="profile-weight" class="form-control" placeholder="请输入体重">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">保存信息</button>
+                            </form>
+                        </div>
+                        
+                        <!-- 健康数据部分 -->
+                        <div id="health-data" class="profile-section">
+                            <h3 style="margin-bottom: 20px;">健康数据</h3>
+                            <p>这里将展示您的健康数据统计和趋势分析。</p>
+                            <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                                <h4>最近健康指标</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                                    <div style="text-align: center; padding: 15px; background: white; border-radius: 5px;">
+                                        <h5 style="color: var(--primary);">BMI</h5>
+                                        <p style="font-size: 1.5rem; font-weight: bold;" id="bmi-value">--</p>
+                                    </div>
+                                    <div style="text-align: center; padding: 15px; background: white; border-radius: 5px;">
+                                        <h5 style="color: var(--accent);">基础代谢</h5>
+                                        <p style="font-size: 1.5rem; font-weight: bold;" id="bmr-value">--</p>
+                                    </div>
+                                    <div style="text-align: center; padding: 15px; background: white; border-radius: 5px;">
+                                        <h5 style="color: var(--secondary);">每日热量</h5>
+                                        <p style="font-size: 1.5rem; font-weight: bold;" id="tdee-value">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 其他部分内容 -->
+                        <div id="diet-history" class="profile-section">
+                            <h3 style="margin-bottom: 20px;">饮食记录</h3>
+                            <p>这里将展示您的历史饮食计划和营养摄入记录。</p>
+                        </div>
+                        
+                        <div id="workout-history" class="profile-section">
+                            <h3 style="margin-bottom: 20px;">运动记录</h3>
+                            <p>这里将展示您的运动历史和进度追踪。</p>
+                        </div>
+                        
+                        <div id="settings" class="profile-section">
+                            <h3 style="margin-bottom: 20px;">账户设置</h3>
+                            <div class="form-group">
+                                <label for="change-password">更改密码</label>
+                                <input type="password" id="change-password" class="form-control" placeholder="输入新密码">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">确认密码</label>
+                                <input type="password" id="confirm-password" class="form-control" placeholder="再次输入新密码">
+                            </div>
+                            <button class="btn btn-primary">更新密码</button>
+                            
+                            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                                <h4>账户操作</h4>
+                                <button class="btn btn-outline" style="margin-top: 10px;">导出个人数据</button>
+                                <button class="btn btn-outline" style="margin-top: 10px; margin-left: 10px;">删除账户</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>健康守护</h3>
+                    <p>AI驱动的个性化健康管理平台，致力于帮助每个人实现主动健康管理。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">首页</a></li>
+                        <li><a href="#">饮食规划</a></li>
+                        <li><a href="#">运动建议</a></li>
+                        <li><a href="#">心理陪伴</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> contact@healthguard.com</li>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 北京市海淀区科技园</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 健康守护 - AI健康管理平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 应用逻辑已移至Vue组件 -->
+</body>
+</html>
