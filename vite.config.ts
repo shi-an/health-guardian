@@ -19,5 +19,5 @@ export default defineConfig({
     }
   },
   // GitHub Pages配置
-  base: '/health-guardian/'
+  base: './'
 })
