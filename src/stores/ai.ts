@@ -5,8 +5,8 @@ import { aiService } from '@/services/ai'
 
 export const useAIStore = defineStore('ai', () => {
   const aiConfig = ref<AIServiceConfig>({
-    provider: 'openai',
-    apiKey: import.meta.env.VITE_AI_API_KEY || ''
+    provider: 'mock', // 使用模拟服务
+    apiKey: '' // 模拟服务不需要API密钥
   })
 
   const chatMessages = ref<ChatMessage[]>([])
