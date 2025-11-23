@@ -17,5 +17,7 @@ export default defineConfig({
         changeOrigin: true
       }
     }
-  }
+  },
+  // GitHub Pages配置
+  base: './'
 })

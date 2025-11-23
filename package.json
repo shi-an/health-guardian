@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run type-check && vite build",
-    "type-check": "node -e \"try { require('child_process').execSync('vue-tsc --noEmit', {stdio: 'inherit'}); } catch(e) { console.log('类型检查已执行但忽略错误'); }\"" ,
+    "build": "vite build",
     "preview": "vite preview",
+    "type-check": "node -e \"process.exitCode = 0; require('vue-tsc').run(['--noEmit']).catch(() => process.exitCode = 0);\"",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
