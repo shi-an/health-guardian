@@ -7,14 +7,27 @@
         </div>
       </template>
       <el-form :model="registerForm" :rules="registerRules" ref="registerFormRef" label-width="80px">
+        <!-- 注册要求提示 -->
+        <div class="register-tips">
+          <el-alert title="注册须知" type="info" :closable="false" show-icon>
+            <div class="tips-content">
+              <p>• 邮箱必须为有效的电子邮件地址</p>
+              <p>• 用户名长度在2-20个字符之间</p>
+              <p>• 密码长度至少6位，建议包含字母和数字</p>
+            </div>
+          </el-alert>
+        </div>
+        
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="registerForm.email" placeholder="请输入邮箱" prefix-icon="MessageFilled" />
+          <el-input v-model="registerForm.email" placeholder="请输入有效的邮箱地址" prefix-icon="MessageFilled" show-word-limit :maxlength="50" />
         </el-form-item>
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="registerForm.username" placeholder="请输入用户名" prefix-icon="UserFilled" />
+          <el-input v-model="registerForm.username" placeholder="请输入2-20个字符的用户名" prefix-icon="UserFilled" show-word-limit :maxlength="20" />
+          <div class="form-tip">用户名长度在2-20个字符之间</div>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" prefix-icon="Lock" show-password />
+          <el-input v-model="registerForm.password" type="password" placeholder="请输入至少6位密码" prefix-icon="Lock" show-password />
+          <div class="form-tip">密码长度至少6位，建议包含字母和数字</div>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
           <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码" prefix-icon="Lock" show-password />
@@ -126,7 +139,22 @@ const goToLogin = () => {
 }
 
 .login-link {
-  text-align: center;
-  margin-top: 10px;
-}
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .register-tips {
+    margin-bottom: 20px;
+  }
+  
+  .tips-content {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  
+  .form-tip {
+    font-size: 12px;
+    color: #909399;
+    margin-top: 4px;
+  }
 </style>
