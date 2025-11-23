@@ -98,17 +98,83 @@ const handleRegister = async () => {
     if (valid) {
       loading.value = true
       try {
+        // 在开发环境中使用模拟注册功能，避免依赖实际API
+        if (import.meta.env.DEV) {
+          console.log('使用模拟注册功能...')
+          // 模拟API延迟
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          
+          // 简单的客户端验证逻辑
+          if (registerForm.username.length < 2 || registerForm.username.length > 20) {
+            throw new Error('用户名长度必须在2-20个字符之间')
+          }
+          if (registerForm.password.length < 6) {
+            throw new Error('密码长度必须至少为6位')
+          }
+          
+          // 创建模拟用户数据
+          const mockUser = {
+            id: Date.now(), // 生成唯一ID
+            username: registerForm.username,
+            email: registerForm.email,
+            createdAt: new Date().toISOString(),
+            // 添加一些默认用户属性
+            healthData: {
+              height: null,
+              weight: null,
+              age: null,
+              gender: null
+            }
+          }
+          
+          // 创建模拟token
+          const mockToken = 'mock_token_' + Date.now()
+          
+          // 存储到localStorage
+          localStorage.setItem('mockUser', JSON.stringify(mockUser))
+          localStorage.setItem('token', mockToken)
+          
+          // 更新用户状态
+          userStore.user = mockUser
+          
+          ElMessage.success('注册成功，正在为您自动登录...')
+          // 直接跳转到首页，无需再次登录
+          setTimeout(() => {
+            router.push('/')
+          }, 1500)
+        } else {
+          // 生产环境使用真实API
           await userStore.register(registerForm.username, registerForm.email, registerForm.password)
           ElMessage.success('注册成功，请登录')
           router.push('/login')
-        } catch (error: any) {
-          // 提供更详细的错误信息
-          const errorMessage = error.response?.data?.message || '注册失败，请稍后重试'
-          ElMessage.error(errorMessage)
-          console.error('Register error:', error)
-        } finally {
-          loading.value = false
         }
+      } catch (error: any) {
+        // 提供更详细的错误信息和日志
+        console.error('注册失败:', error)
+        console.error('错误详情:', {
+          message: error.message,
+          response: error.response,
+          status: error.response?.status,
+          data: error.response?.data,
+          config: error.config
+        })
+        
+        // 根据错误类型提供更具体的提示
+        let errorMessage = '注册失败，请稍后重试'
+        if (error.response?.status === 400) {
+          errorMessage = error.response.data?.message || '输入信息有误，请检查'
+        } else if (error.response?.status === 409) {
+          errorMessage = '该邮箱或用户名已被注册'
+        } else if (error.response?.status === 500) {
+          errorMessage = '服务器错误，请稍后重试'
+        } else if (error.message) {
+          errorMessage = error.message
+        }
+        
+        ElMessage.error(errorMessage)
+      } finally {
+        loading.value = false
+      }
     }
   })
 }
