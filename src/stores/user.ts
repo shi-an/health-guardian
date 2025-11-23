@@ -71,10 +71,26 @@ export const useUserStore = defineStore('user', () => {
     try {
       // 在开发环境中，优先从localStorage读取模拟用户数据
       if (import.meta.env.DEV) {
-        const mockUserData = localStorage.getItem('mockUser')
+        let mockUserData = localStorage.getItem('mockUser')
+        
+        // 检查是否存在测试账户的情况
         if (mockUserData) {
+          const parsedUser = JSON.parse(mockUserData)
+          // 如果是测试账户，确保有完整的数据结构
+          if (parsedUser.email === 'test@example.com') {
+            parsedUser.username = '测试用户'
+            parsedUser.healthData = parsedUser.healthData || {
+              height: 175,
+              weight: 70,
+              age: 25,
+              gender: 'male'
+            }
+            // 更新localStorage中的数据
+            mockUserData = JSON.stringify(parsedUser)
+            localStorage.setItem('mockUser', mockUserData)
+          }
           console.log('使用模拟用户数据...')
-          user.value = JSON.parse(mockUserData)
+          user.value = parsedUser
           return
         }
       }
