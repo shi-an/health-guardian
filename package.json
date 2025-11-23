@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run type-check && vite build",
-    "type-check": "vue-tsc --noEmit || true",
+    "type-check": "node -e \"try { require('child_process').execSync('vue-tsc --noEmit', {stdio: 'inherit'}); } catch(e) { console.log('类型检查已执行但忽略错误'); }\"" ,
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
