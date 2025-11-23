@@ -33,7 +33,8 @@ export const userService = {
   },
 
   async register(name: string, email: string, password: string): Promise<User & { token: string }> {
-    return api.post('/auth/register', { name, email, password })
+    // 将name参数映射为username，与表单字段保持一致
+    return api.post('/auth/register', { username: name, email, password })
   },
 
   async getProfile(): Promise<User> {
