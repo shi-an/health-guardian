@@ -57,12 +57,13 @@
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import type { WorkoutPlan } from '@/types'
 import { useAIStore } from '@/stores/ai'
 
 const aiStore = useAIStore()
 const workoutFormRef = ref<FormInstance>()
 const loading = ref(false)
-const workoutPlan = ref<string>('')
+const workoutPlan = ref<WorkoutPlan | null>(null)
 
 const workoutForm = reactive({
   goal: '',
@@ -108,17 +109,44 @@ const generateWorkoutPlan = async () => {
   })
 }
 
-const formatWorkoutPlan = (plan: string) => {
-  // 将纯文本转换为HTML格式显示
-  return plan
-    .replace(/\n/g, '<br>')
-    .replace(/### (.*?)(?=<br>|$)/g, '<h4>$1</h4>')
-    .replace(/## (.*?)(?=<br>|$)/g, '<h3>$1</h3>')
+const formatWorkoutPlan = (plan: WorkoutPlan) => {
+  // 将WorkoutPlan对象转换为HTML格式显示
+  let html = `<h3>运动计划概览</h3>`
+  html += `<p>总时长: ${plan.duration}分钟</p>`
+  html += `<p>频率: ${plan.frequency}</p>`
+  html += `<p>强度: ${plan.intensity}</p>`
+  html += `<h3>推荐运动</h3>`
+  html += `<ul>`
+  plan.exercises.forEach(exercise => {
+    if (exercise.duration > 0) {
+      html += `<li>${exercise.name} - ${exercise.duration}分钟</li>`
+    } else {
+      html += `<li>${exercise.name} - ${exercise.sets}组×${exercise.reps}次</li>`
+    }
+  })
+  html += `</ul>`
+  return html
 }
 
 const downloadWorkoutPlan = () => {
+  if (!workoutPlan.value) return
+  
+  // 将WorkoutPlan对象转换为文本格式
+  let text = '健身计划概览\n'
+  text += `总时长: ${workoutPlan.value.duration}分钟\n`
+  text += `频率: ${workoutPlan.value.frequency}\n`
+  text += `强度: ${workoutPlan.value.intensity}\n\n`
+  text += '推荐运动\n'
+  workoutPlan.value.exercises.forEach(exercise => {
+    if (exercise.duration > 0) {
+      text += `- ${exercise.name}: ${exercise.duration}分钟\n`
+    } else {
+      text += `- ${exercise.name}: ${exercise.sets}组×${exercise.reps}次\n`
+    }
+  })
+  
   // 创建一个Blob对象
-  const blob = new Blob([workoutPlan.value], { type: 'text/plain;charset=utf-8' })
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   

@@ -9,10 +9,30 @@
       
       <div class="profile-content">
         <div class="profile-avatar">
-          <el-avatar :size="100" :src="user.avatar || defaultAvatar">
-            {{ user.username?.charAt(0) || 'U' }}
-          </el-avatar>
-          <el-button type="primary" size="small" class="avatar-upload-btn">上传头像</el-button>
+          <div class="avatar-wrapper">
+            <el-avatar :size="100" :src="userInfo.avatar || defaultAvatar" fit="cover">
+              {{ user.username?.charAt(0) || 'U' }}
+            </el-avatar>
+            <div class="avatar-mask">
+              <i class="el-icon-camera"></i>
+            </div>
+            <input
+              ref="avatarInput"
+              type="file"
+              accept="image/*"
+              class="avatar-input"
+              @change="handleAvatarUpload"
+            />
+          </div>
+          <el-button 
+            type="primary" 
+            size="small" 
+            class="avatar-upload-btn"
+            @click="triggerAvatarUpload"
+            :loading="uploadingAvatar"
+          >
+            {{ uploadingAvatar ? '上传中...' : '更换头像' }}
+          </el-button>
         </div>
         
         <div class="profile-form">
@@ -106,14 +126,17 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 const profileFormRef = ref<FormInstance>()
 const passwordFormRef = ref<FormInstance>()
+const avatarInput = ref<HTMLInputElement>()
 const saving = ref(false)
 const changingPassword = ref(false)
+const uploadingAvatar = ref(false)
 const changePasswordVisible = ref(false)
 const defaultAvatar = 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 
 const userInfo = reactive({
   username: '',
   email: '',
+  avatar: '',
   gender: '',
   age: null as number | null,
   height: null as number | null,
@@ -225,12 +248,72 @@ const loadUserInfo = () => {
   if (user) {
     userInfo.username = user.username || ''
     userInfo.email = user.email || ''
+    userInfo.avatar = user.avatar || ''
     userInfo.gender = user.gender || ''
     userInfo.age = user.age || null
     userInfo.height = user.height || null
     userInfo.weight = user.weight || null
     userInfo.healthGoal = user.healthGoal || ''
     userInfo.phone = user.phone || ''
+  }
+}
+
+const triggerAvatarUpload = () => {
+  avatarInput.value?.click()
+}
+
+const handleAvatarUpload = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  
+  if (!file) return
+  
+  // 检查文件类型
+  if (!file.type.startsWith('image/')) {
+    ElMessage.error('请选择图片文件')
+    return
+  }
+  
+  // 检查文件大小（5MB限制）
+  if (file.size > 5 * 1024 * 1024) {
+    ElMessage.error('图片大小不能超过5MB')
+    return
+  }
+  
+  uploadingAvatar.value = true
+  
+  try {
+    // 在实际项目中，这里应该上传文件到服务器
+    // 这里使用模拟的方式，直接读取为DataURL
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      try {
+        const avatarUrl = e.target?.result as string
+        userInfo.avatar = avatarUrl
+        
+        // 模拟更新用户信息
+        await userStore.updateProfile({
+          ...userInfo,
+          avatar: avatarUrl
+        })
+        
+        ElMessage.success('头像上传成功')
+      } catch (error) {
+        ElMessage.error('头像上传失败，请稍后重试')
+        console.error('Upload avatar error:', error)
+      } finally {
+        uploadingAvatar.value = false
+        // 清空input，允许重复选择同一文件
+        if (input) {
+          input.value = ''
+        }
+      }
+    }
+    reader.readAsDataURL(file)
+  } catch (error) {
+    ElMessage.error('头像上传失败，请稍后重试')
+    console.error('Upload avatar error:', error)
+    uploadingAvatar.value = false
   }
 }
 
@@ -249,6 +332,14 @@ onMounted(() => {
 .profile-card,
 .security-card {
   margin-bottom: 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.profile-card:hover,
+.security-card:hover {
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .profile-header,
@@ -256,6 +347,7 @@ onMounted(() => {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+  color: #303133;
 }
 
 .profile-content {
@@ -272,11 +364,95 @@ onMounted(() => {
   gap: 15px;
 }
 
+.avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.avatar-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.avatar-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+  font-size: 24px;
+}
+
+.avatar-wrapper:hover .avatar-mask {
+  opacity: 1;
+}
+
+.avatar-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .profile-form {
   width: 100%;
 }
 
 .avatar-upload-btn {
   margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.avatar-upload-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* 表单元素增强样式 */
+.el-form-item {
+  margin-bottom: 24px;
+}
+
+.el-form-item__label {
+  font-weight: 500;
+  color: #606266;
+}
+
+.el-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.el-button--primary:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 15px;
+  }
+  
+  .profile-header,
+  .security-header {
+    font-size: 18px;
+  }
+  
+  .el-form-item__label {
+    font-size: 14px;
+  }
 }
 </style>

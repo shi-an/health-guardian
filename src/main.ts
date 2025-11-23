@@ -21,15 +21,13 @@ app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 
-// 应用启动时自动加载用户认证状态
-const initApp = async () => {
-  const userStore = useUserStore()
-  // 尝试从localStorage加载用户信息
-  await userStore.loadUser()
-  
-  // 挂载应用
-  app.mount('#app')
-}
+// 应用先挂载，确保页面立即渲染
+app.mount('#app')
 
-// 初始化应用
-initApp()
+// 挂载后异步加载用户认证状态，不阻塞页面显示
+const userStore = useUserStore()
+Promise.resolve().then(() => {
+  userStore.loadUser().catch(error => {
+    console.log('用户数据加载失败，但不影响页面显示:', error)
+  })
+})

@@ -21,7 +21,12 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 onMounted(() => {
-  userStore.loadUser()
+  // 异步加载用户数据，但不阻塞页面渲染
+  Promise.resolve().then(() => {
+    userStore.loadUser().catch(error => {
+      console.log('用户数据加载失败，但不影响首页显示:', error)
+    })
+  })
 })
 </script>
 

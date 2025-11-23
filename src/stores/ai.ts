@@ -93,6 +93,21 @@ export const useAIStore = defineStore('ai', () => {
     }
   }
 
+  const getMentalHealthSupport = async (message: string): Promise<string> => {
+    loading.value = true
+    try {
+      // 为心理健康支持构建专门的提示词，确保获得适当的回应
+      const prompt = `作为心理健康助手，请对以下问题提供专业、友善且支持性的回答：${message}\n请提供实用的建议和情感支持，同时强调如情况严重应寻求专业帮助。`
+      const response = await aiService.generateText(prompt)
+      return response
+    } catch (error) {
+      console.error('获取心理健康支持失败:', error)
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
   const parseDietPlan = (text: string): DietPlan => {
     // 解析AI返回的文本为结构化的饮食计划
     // 这里简化处理，实际应该根据AI返回的格式进行解析
@@ -133,6 +148,7 @@ export const useAIStore = defineStore('ai', () => {
     setAIConfig,
     generateDietPlan,
     generateWorkoutPlan,
-    sendChatMessage
+    sendChatMessage,
+    getMentalHealthSupport
   }
 })

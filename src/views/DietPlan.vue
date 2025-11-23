@@ -121,6 +121,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { HealthData, DietPlan } from '@/types'
 import { useAIStore } from '@/stores/ai'

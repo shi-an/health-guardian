@@ -1,13 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: () => import('@/views/Home.vue')
+      component: () => import('@/views/Home.vue'),
+      meta: { requiresAuth: false } // 明确设置首页不需要认证
     },
     {
       path: '/login',
@@ -44,12 +45,42 @@ const router = createRouter({
       name: 'Profile',
       component: () => import('@/views/Profile.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('@/views/About.vue'),
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      component: () => import('@/views/TermsOfService.vue'),
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/privacy',
+      name: 'Privacy',
+      component: () => import('@/views/PrivacyPolicy.vue'),
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/contact',
+      name: 'Contact',
+      component: () => import('@/views/ContactUs.vue'),
+      meta: { requiresAuth: false }
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
+  
+  // 确保首页总是可以直接访问
+  if (to.path === '/') {
+    next()
+    return
+  }
   
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     next('/login')

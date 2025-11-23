@@ -6,10 +6,10 @@
         <p>智能健康管理，从这里开始</p>
       </div>
       <div class="footer-links">
-        <a href="#">关于我们</a>
-        <a href="#">服务条款</a>
-        <a href="#">隐私政策</a>
-        <a href="#">联系我们</a>
+        <router-link to="/about">关于我们</router-link>
+        <router-link to="/terms">服务条款</router-link>
+        <router-link to="/privacy">隐私政策</router-link>
+        <router-link to="/contact">联系我们</router-link>
       </div>
       <div class="footer-copyright">
         <p>&copy; {{ new Date().getFullYear() }} 健康管理平台. 保留所有权利.</p>
