@@ -57,9 +57,9 @@
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { useAiStore } from '@/stores/ai'
+import { useAIStore } from '@/stores/ai'
 
-const aiStore = useAiStore()
+const aiStore = useAIStore()
 const workoutFormRef = ref<FormInstance>()
 const loading = ref(false)
 const workoutPlan = ref<string>('')

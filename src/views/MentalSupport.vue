@@ -97,14 +97,14 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useAiStore } from '@/stores/ai'
+import { useAIStore } from '@/stores/ai'
 
 interface ChatMessage {
   role: 'user' | 'ai'
   content: string
 }
 
-const aiStore = useAiStore()
+const aiStore = useAIStore()
 const chatMessagesRef = ref<HTMLElement>()
 const loading = ref(false)
 const inputMessage = ref('')

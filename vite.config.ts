@@ -19,5 +19,10 @@ export default defineConfig({
     }
   },
   // GitHub Pages配置
-  base: './'
+  base: './',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false
+  }
 })
