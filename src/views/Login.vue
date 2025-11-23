@@ -81,14 +81,13 @@ const handleLogin = async () => {
     if (valid) {
       loading.value = true
       try {
-        // 在开发环境中使用模拟登录功能，避免依赖实际API
+        // 在开发环境中完全使用模拟登录功能，避免任何实际API调用
         if (import.meta.env.DEV) {
           console.log('使用模拟登录功能...')
           // 模拟API延迟
           await new Promise(resolve => setTimeout(resolve, 1000))
           
           // 简单的模拟登录逻辑 - 任何非空的邮箱和密码都可以登录
-          // 这样用户可以直接体验完整功能
           if (loginForm.email && loginForm.password) {
             // 实现记住我功能
             if (loginForm.rememberMe) {
@@ -129,6 +128,9 @@ const handleLogin = async () => {
             // 存储模拟的用户信息和token
             localStorage.setItem('token', mockToken)
             localStorage.setItem('mockUser', JSON.stringify(mockUser))
+            
+            // 手动更新userStore状态，避免调用userStore.loadUser()可能导致的API请求
+            userStore.$patch({ user: mockUser })
             
             ElMessage.success('登录成功')
             // 延迟跳转，让用户看到成功提示

@@ -69,11 +69,11 @@ export const useUserStore = defineStore('user', () => {
     }
     
     try {
-      // 在开发环境中，优先从localStorage读取模拟用户数据
+      // 在开发环境中，完全使用模拟用户数据
       if (import.meta.env.DEV) {
         let mockUserData = localStorage.getItem('mockUser')
         
-        // 检查是否存在测试账户的情况
+        // 如果有mockUser数据，直接使用
         if (mockUserData) {
           const parsedUser = JSON.parse(mockUserData)
           // 如果是测试账户，确保有完整的数据结构
@@ -92,26 +92,50 @@ export const useUserStore = defineStore('user', () => {
           console.log('使用模拟用户数据...')
           user.value = parsedUser
           return
+        } else {
+          // 如果没有mockUser数据但有token，创建一个临时的模拟用户
+          // 这样可以避免调用真实API，同时保持用户已登录的状态
+          console.log('创建临时模拟用户数据...')
+          const tempMockUser = {
+            id: Date.now(),
+            username: '模拟用户',
+            email: 'mock@example.com',
+            createdAt: new Date().toISOString(),
+            healthData: {
+              height: 170,
+              weight: 65,
+              age: 30,
+              gender: 'male'
+            }
+          }
+          user.value = tempMockUser
+          return
         }
       }
       
-      // 生产环境或没有模拟数据时，使用真实API
+      // 生产环境使用真实API
       const userData = await userService.getProfile()
       if (!userData) {
         throw new Error('无效的用户数据')
       }
       user.value = userData
     } catch (error) {
-      // 只在非开发环境或有明确错误时清理状态
-      if (!import.meta.env.DEV || (error instanceof Error && !error.message.includes('Network Error'))) {
+      // 只在非开发环境清理状态
+      if (!import.meta.env.DEV) {
         logout()
         console.warn('用户认证失败，已清理登录状态:', error)
       } else {
-        // 在开发环境中，尝试保留模拟用户数据
-        const mockUserData = localStorage.getItem('mockUser')
-        if (mockUserData) {
-          console.log('使用缓存的模拟用户数据...')
-          user.value = JSON.parse(mockUserData)
+        // 在开发环境中，即使发生错误也尽量保留用户状态
+        // 如果用户值为null但有token，创建一个临时模拟用户
+        if (!user.value) {
+          console.log('发生错误，创建临时模拟用户以保持登录状态...')
+          const tempMockUser = {
+            id: Date.now(),
+            username: '模拟用户',
+            email: 'mock@example.com',
+            createdAt: new Date().toISOString(),
+          }
+          user.value = tempMockUser
         }
       }
     }
