@@ -1,4 +1,4 @@
-import{y as m,r as c}from"./index-19f31b93.js";const w=r=>new Promise(s=>setTimeout(s,r));class ${async generateText(s,o){return console.log("使用模拟AI服务生成文本，避免API调用..."),await w(1e3),s.includes("基于以下健康数据生成个性化饮食计划")?`这是一份为您定制的饮食计划：
+import{y as m,r as c}from"./index-e3d6c02a.js";const w=r=>new Promise(s=>setTimeout(s,r));class ${async generateText(s,o){return console.log("使用模拟AI服务生成文本，避免API调用..."),await w(1e3),s.includes("基于以下健康数据生成个性化饮食计划")?`这是一份为您定制的饮食计划：
 
 早餐：全麦吐司2片，煮鸡蛋1个，牛奶200ml，蓝莓适量
 午餐：糙米饭1碗，清蒸鱼150g，清炒菠菜，番茄蛋汤
