@@ -20,7 +20,7 @@
 
 1. 克隆项目
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/shi-an/health-guardian
    ```
 
 2. 安装依赖
