@@ -20,7 +20,7 @@
 
 1. 克隆项目
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/shi-an/health-guardian
    ```
 
 2. 安装依赖
@@ -48,7 +48,7 @@
 
 3. 在本地项目目录中配置远程仓库：
    ```bash
-   git remote add origin <your-github-repository-url>
+   git remote add origin https://github.com/shi-an/health-guardian
    ```
 
 4. 推送到GitHub：
