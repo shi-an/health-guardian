@@ -84,7 +84,7 @@ const handleLogout = () => {
   gap: 8px;
   font-size: 20px;
   font-weight: 600;
-  color: #409eff;
+  color: var(--primary);
 }
 
 .nav-links {
@@ -94,14 +94,14 @@ const handleLogout = () => {
 
 .nav-link {
   text-decoration: none;
-  color: #606266;
+  color: var(--gray);
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .nav-link:hover,
 .nav-link.router-link-active {
-  color: #409eff;
+  color: var(--primary);
 }
 
 .user-actions {
@@ -175,6 +175,19 @@ const handleLogout = () => {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(74, 157, 247, 0.3);
   }
+
+@media (max-width: 768px) {
+  .header-content {
+    height: auto;
+    padding: 10px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .nav-links {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+}
 
   .user-name {
     font-weight: 500;

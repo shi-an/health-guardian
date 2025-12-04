@@ -37,6 +37,24 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
+:root {
+  --primary: #4a9df7;
+  --secondary: #6cdfcc;
+  --accent: #ff7e5f;
+  --dark: #343a40;
+  --dark-gray: #495057;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --lighter-gray: #f8f9fa;
+  --white: #ffffff;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-sm: 6px;
+  --shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
 #app {
   min-height: 100vh;
   display: flex;
@@ -47,5 +65,25 @@ onMounted(() => {
 main {
   flex: 1;
   background-color: #f5f7fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--dark-gray);
 }
 </style>
